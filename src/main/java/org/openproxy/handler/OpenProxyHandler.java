@@ -7,6 +7,7 @@ package org.openproxy.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import java.net.InetSocketAddress;
@@ -19,7 +20,7 @@ import org.openproxy.controller.ProxyControllerFactory;
  */
 public class OpenProxyHandler extends ChannelInboundHandlerAdapter {
 
-	private ProxyControllerFactory proxyControllerFactory;
+	private final ProxyControllerFactory proxyControllerFactory;
 
 	public OpenProxyHandler(ProxyControllerFactory proxyControllerFactory) {
 		this.proxyControllerFactory = proxyControllerFactory;
@@ -27,9 +28,8 @@ public class OpenProxyHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		if (msg instanceof HttpRequest) {
-			final HttpRequest request = (HttpRequest) msg;
-
+		if (msg instanceof FullHttpRequest) {
+			final FullHttpRequest request = (FullHttpRequest) msg;
 			final ProxyController proxyController = proxyControllerFactory.build();
 			final HttpResponse response = proxyController.resolveClientRequest(request);
 			if (response != null) {
