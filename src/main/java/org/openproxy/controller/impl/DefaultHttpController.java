@@ -52,7 +52,7 @@ public class DefaultHttpController implements ProxyController {
 
 	@Override
 	public InetSocketAddress adviseTargetAddress() {
-		return null;
+		return new InetSocketAddress("www.google.com",80);
 	}
 
 }

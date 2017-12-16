@@ -5,22 +5,22 @@
  */
 package org.openproxy.handler;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import org.openproxy.controller.ProxyControllerFactory;
 
 /**
  *
- * @author dnikiforov
+ * @author dmitry
  */
-public class OpenProxyChildHandler extends ChannelInitializer<SocketChannel> {
+public class ClientChildHandler extends ChannelInitializer<SocketChannel> {
 
-	private ProxyControllerFactory proxyControllerFactory;
+	private final ChannelHandlerContext backCtx;
 	
-	public OpenProxyChildHandler(ProxyControllerFactory proxyControllerFactory) {
-		this.proxyControllerFactory=proxyControllerFactory;
+	public ClientChildHandler(ChannelHandlerContext backCtx) {
+		this.backCtx=backCtx;
 	}
 	
 	@Override
@@ -28,6 +28,8 @@ public class OpenProxyChildHandler extends ChannelInitializer<SocketChannel> {
 		ch.pipeline().addLast("codec", new HttpServerCodec());
         ch.pipeline().addLast("aggregator",
         new HttpObjectAggregator(512*1024));		
-		ch.pipeline().addLast(new OpenProxyHandler(proxyControllerFactory));
+		ch.pipeline().addLast(new ClientProxyHandler(backCtx));
 	}
+
+    
 }

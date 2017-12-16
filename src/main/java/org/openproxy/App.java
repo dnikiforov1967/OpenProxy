@@ -6,7 +6,7 @@
 package org.openproxy;
 
 import org.openproxy.controller.impl.DefaultHttpControllerFactory;
-import org.openproxy.handler.OpenProxyChildHandler;
+import org.openproxy.handler.client.ClientHandler;
 
 /**
  *
@@ -16,7 +16,7 @@ public class App {
 	
 	public static void main(String... args) {
 		System.out.println("OpenProxy");
-		new OpenProxy(8080, 2, 16).openServer(new OpenProxyChildHandler(new DefaultHttpControllerFactory()));
+		new OpenProxy(8080, 2, 16).openServer(new ClientHandler(new DefaultHttpControllerFactory()));
 	}
 	
 }
